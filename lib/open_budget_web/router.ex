@@ -7,5 +7,7 @@ defmodule OpenBudgetWeb.Router do
 
   scope "/api", OpenBudgetWeb do
     pipe_through :api
+
+    resources "/accounts", AccountController, except: [:new, :edit]
   end
 end
