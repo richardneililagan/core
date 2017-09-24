@@ -18,7 +18,7 @@ defmodule OpenBudget.Budgets.Account do
   schema "accounts" do
     field :description, :string
     field :name, :string
-    field :type, :string
+    field :category, :string
 
     timestamps()
   end
@@ -26,7 +26,7 @@ defmodule OpenBudget.Budgets.Account do
   @doc false
   def changeset(%Account{} = account, attrs) do
     account
-    |> cast(attrs, [:name, :description, :type])
-    |> validate_required([:name, :description, :type])
+    |> cast(attrs, [:name, :description, :category])
+    |> validate_required([:name, :description, :category])
   end
 end

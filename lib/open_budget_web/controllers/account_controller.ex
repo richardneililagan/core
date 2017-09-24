@@ -8,7 +8,7 @@ defmodule OpenBudgetWeb.AccountController do
 
   def index(conn, _params) do
     accounts = Budgets.list_accounts()
-    render(conn, "index.json", accounts: accounts)
+    render(conn, "index.json-api", data: accounts)
   end
 
   def create(conn, %{"account" => account_params}) do
@@ -17,13 +17,13 @@ defmodule OpenBudgetWeb.AccountController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", account_path(conn, :show, account))
-      |> render("show.json", account: account)
+      |> render("show.json-api", data: account)
     end
   end
 
   def show(conn, %{"id" => id}) do
     account = Budgets.get_account!(id)
-    render(conn, "show.json", account: account)
+    render(conn, "show.json-api", data: account)
   end
 
   def update(conn, %{"id" => id, "account" => account_params}) do
@@ -31,7 +31,7 @@ defmodule OpenBudgetWeb.AccountController do
 
     with {:ok, %Account{} = account} <-
       Budgets.update_account(account, account_params) do
-      render(conn, "show.json", account: account)
+      render(conn, "show.json-api", data: account)
     end
   end
 

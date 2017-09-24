@@ -5,7 +5,7 @@ defmodule OpenBudget.Repo.Migrations.CreateAccounts do
     create table(:accounts) do
       add :name, :string
       add :description, :string
-      add :type, :string
+      add :category, :string
 
       timestamps()
     end

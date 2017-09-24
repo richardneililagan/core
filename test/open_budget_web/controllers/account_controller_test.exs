@@ -4,9 +4,9 @@ defmodule OpenBudgetWeb.AccountControllerTest do
   alias OpenBudget.Budgets
   alias OpenBudget.Budgets.Account
 
-  @create_attrs %{description: "some description", name: "some name", type: "some type"}
-  @update_attrs %{description: "some updated description", name: "some updated name", type: "some updated type"}
-  @invalid_attrs %{description: nil, name: nil, type: nil}
+  @create_attrs %{description: "some description", name: "some name", category: "some type"}
+  @update_attrs %{description: "some updated description", name: "some updated name", category: "some updated type"}
+  @invalid_attrs %{description: nil, name: nil, category: nil}
 
   def fixture(:account) do
     {:ok, account} = Budgets.create_account(@create_attrs)
@@ -31,10 +31,14 @@ defmodule OpenBudgetWeb.AccountControllerTest do
 
       conn = get conn, account_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
+        "type" => "account",
         "id" => id,
-        "description" => "some description",
-        "name" => "some name",
-        "type" => "some type"}
+        "attributes" => %{
+          "description" => "some description",
+          "name" => "some name",
+          "category" => "some type"
+        }
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -48,14 +52,15 @@ defmodule OpenBudgetWeb.AccountControllerTest do
 
     test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
       conn = put conn, account_path(conn, :update, account), account: @update_attrs
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get conn, account_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
-        "id" => id,
-        "description" => "some updated description",
-        "name" => "some updated name",
-        "type" => "some updated type"}
+        "id" => "#{id}",
+        "type" => "account",
+        "attributes" => %{
+          "description" => "some updated description",
+          "name" => "some updated name",
+          "category" => "some updated type"
+        }
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn, account: account} do

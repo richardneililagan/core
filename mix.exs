@@ -40,6 +40,7 @@ defmodule OpenBudget.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:ja_serializer, "~> 0.12.0"},
       {:edeliver, "~> 1.4.4"},
       {:distillery, "~> 1.4", runtime: false}
     ]

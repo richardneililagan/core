@@ -6,8 +6,8 @@ defmodule OpenBudget.BudgetsTest do
   describe "accounts" do
     alias OpenBudget.Budgets.Account
 
-    @valid_attrs %{description: "some description", name: "some name", type: "some type"}
-    @update_attrs %{description: "some updated description", name: "some updated name", type: "some updated type"}
+    @valid_attrs %{description: "some description", name: "some name", category: "some type"}
+    @update_attrs %{description: "some updated description", name: "some updated name", category: "some updated type"}
     @invalid_attrs %{description: nil, name: nil, type: nil}
 
     def account_fixture(attrs \\ %{}) do
@@ -33,7 +33,7 @@ defmodule OpenBudget.BudgetsTest do
       assert {:ok, %Account{} = account} = Budgets.create_account(@valid_attrs)
       assert account.description == "some description"
       assert account.name == "some name"
-      assert account.type == "some type"
+      assert account.category == "some type"
     end
 
     test "create_account/1 with invalid data returns error changeset" do
@@ -46,7 +46,7 @@ defmodule OpenBudget.BudgetsTest do
       assert %Account{} = account
       assert account.description == "some updated description"
       assert account.name == "some updated name"
-      assert account.type == "some updated type"
+      assert account.category == "some updated type"
     end
 
     test "update_account/2 with invalid data returns error changeset" do
