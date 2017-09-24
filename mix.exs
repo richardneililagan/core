@@ -39,7 +39,9 @@ defmodule OpenBudget.Mixfile do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:edeliver, "~> 1.4.4"},
+      {:distillery, "~> 1.4", runtime: false}
     ]
   end
 
