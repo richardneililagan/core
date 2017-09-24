@@ -11,9 +11,10 @@ defmodule OpenBudgetWeb.AccountController do
     render(conn, "index.json-api", data: accounts)
   end
 
-  def create(conn, %{"account" => account_params}) do
+  def create(conn, %{"data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
     with {:ok, %Account{} = account} <-
-      Budgets.create_account(account_params) do
+      Budgets.create_account(attrs) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", account_path(conn, :show, account))
@@ -26,11 +27,12 @@ defmodule OpenBudgetWeb.AccountController do
     render(conn, "show.json-api", data: account)
   end
 
-  def update(conn, %{"id" => id, "account" => account_params}) do
+  def update(conn, %{"id" => id, "data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
     account = Budgets.get_account!(id)
 
     with {:ok, %Account{} = account} <-
-      Budgets.update_account(account, account_params) do
+      Budgets.update_account(account, attrs) do
       render(conn, "show.json-api", data: account)
     end
   end
