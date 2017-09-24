@@ -17,9 +17,9 @@ config :open_budget, OpenBudgetWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   load_from_system_env: true,
   url: [host: "127.0.0.1", port: {:system, "PORT"}],
-  # cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
-  version: Mix.Project.config[:version]
+  version: Mix.Project.config[:version],
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production
 config :logger, level: :info
