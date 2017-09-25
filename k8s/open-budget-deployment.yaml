@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: open-budget-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: open-budget
+    spec:
+      containers:
+        - name: open-budget
+          image: open_budget:0.0.1
+          ports:
+            - containerPort: 8000
+          args: ["foreground"]
+          env:
+            - name: HOST
+              value: "example.com"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: secret_key_base
+            - name: DATABASE_USERNAME
+              value: "postgres"
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: database_password
+            - name: DATABASE_NAME
+              value: "open_budget_dev"
+            - name: DATABASE_HOST
+              value: "10.0.2.2"
