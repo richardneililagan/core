@@ -42,7 +42,8 @@ defmodule OpenBudget.Mixfile do
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:ja_serializer, "~> 0.12.0"},
       {:edeliver, "~> 1.4.4"},
-      {:distillery, "~> 1.4", runtime: false}
+      {:distillery, "~> 1.4", runtime: false},
+      {:mix_docker, "~> 0.5.0"}
     ]
   end
 
