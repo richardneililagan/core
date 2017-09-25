@@ -20,7 +20,7 @@ defmodule OpenBudget.Mixfile do
   def application do
     [
       mod: {OpenBudget.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :peerage]
     ]
   end
 
@@ -43,7 +43,8 @@ defmodule OpenBudget.Mixfile do
       {:ja_serializer, "~> 0.12.0"},
       {:edeliver, "~> 1.4.4"},
       {:distillery, "~> 1.4", runtime: false},
-      {:mix_docker, "~> 0.5.0"}
+      {:mix_docker, "~> 0.5.0"},
+      {:peerage, "~> 1.0.2"}
     ]
   end
 

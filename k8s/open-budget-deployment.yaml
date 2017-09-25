@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: open-budget
-          image: open_budget:0.0.1
+          image: open_budget:release
           ports:
             - containerPort: 8000
           args: ["foreground"]
@@ -34,3 +34,7 @@ spec:
               value: "open_budget_dev"
             - name: DATABASE_HOST
               value: "10.0.2.2"
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

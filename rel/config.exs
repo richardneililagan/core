@@ -53,5 +53,6 @@ release :open_budget do
     "migrate": "rel/commands/migrate.sh",
     "seed": "rel/commands/seed.sh"
   ]
+  set vm_args: "./vm_args"
 end
 
