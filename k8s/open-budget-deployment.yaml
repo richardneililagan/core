@@ -11,13 +11,13 @@ spec:
     spec:
       containers:
         - name: open-budget
-          image: open_budget:release
+          image: openbudget/core:latest
           ports:
             - containerPort: 8000
           args: ["foreground"]
           env:
             - name: HOST
-              value: "example.com"
+              value: "api.openbudget.xyz"
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
