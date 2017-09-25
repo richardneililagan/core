@@ -3,6 +3,7 @@ defmodule OpenBudgetWeb.AccountController do
 
   alias OpenBudget.Budgets
   alias OpenBudget.Budgets.Account
+  alias JaSerializer.Params
 
   action_fallback OpenBudgetWeb.FallbackController
 
@@ -12,7 +13,7 @@ defmodule OpenBudgetWeb.AccountController do
   end
 
   def create(conn, %{"data" => data}) do
-    attrs = JaSerializer.Params.to_attributes(data)
+    attrs = Params.to_attributes(data)
     with {:ok, %Account{} = account} <-
       Budgets.create_account(attrs) do
       conn
@@ -28,7 +29,7 @@ defmodule OpenBudgetWeb.AccountController do
   end
 
   def update(conn, %{"id" => id, "data" => data}) do
-    attrs = JaSerializer.Params.to_attributes(data)
+    attrs = Params.to_attributes(data)
     account = Budgets.get_account!(id)
 
     with {:ok, %Account{} = account} <-
