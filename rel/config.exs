@@ -49,10 +49,5 @@ release :open_budget do
   set applications: [
     :runtime_tools
   ]
-  set commands: [
-    "migrate": "rel/commands/migrate.sh",
-    "seed": "rel/commands/seed.sh"
-  ]
-  set vm_args: "./vm_args"
 end
 

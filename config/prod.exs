@@ -30,11 +30,6 @@ config :open_budget, OpenBudget.Repo,
   database: "",
   pool_size: 10
 
-config :peerage, via: Peerage.Via.Dns,
-  dns_name: "open-budget-service-headless.default.svc.cluster.local",
-  app_name: "open-budget",
-  interval: 5
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
