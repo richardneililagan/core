@@ -2,7 +2,9 @@ defmodule OpenBudgetWeb.Router do
   use OpenBudgetWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json-api"]
+    plug JaSerializer.ContentTypeNegotiation
+    plug JaSerializer.Deserializer
   end
 
   scope "/api", OpenBudgetWeb do

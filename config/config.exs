@@ -13,7 +13,7 @@ config :open_budget,
 config :open_budget, OpenBudgetWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "aN2o/h57OsXeuJTFr6A2XwENBMTJazo2mtGAi84mMwvJc/or8VO4Ig60mW+xlgQb",
-  render_errors: [view: OpenBudgetWeb.ErrorView, accepts: ~w(json)],
+  render_errors: [view: OpenBudgetWeb.ErrorView, accepts: ~w(json json-api)],
   pubsub: [name: OpenBudget.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
