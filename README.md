@@ -1,12 +1,12 @@
 # OpenBudget Core
 
-[![Build Status](https://travis-ci.org/obudget/core.svg?branch=master)](https://travis-ci.org/obudget/core)
+[![Build Status](https://travis-ci.org/obudget/core.svg?branch=master)](https://travis-ci.org/obudget/core) [![Coverage Status](https://coveralls.io/repos/github/obudget/core/badge.svg?branch=master)](https://coveralls.io/github/obudget/core?branch=master)
 
 ## Overview
 
 * [OpenBudget](https://openbudget.xyz) is an open source budgeting platform inspired by popular budgeting apps like [YNAB](https://youneedabudget.com) and [GoodBudget](https://goodbudget.com).
 * This is an API backend that powers [OpenBudget UI](https://github.com/obudget/ui), which is also an open source project.
-* A public deployment of this code is maintained at [api.openbudget.xyz](https://api.openbudget.xyz)
+* A public deployment of this code is maintained at [api.openbudget.xyz/api](https://api.openbudget.xyz/api)
 
 ## Why Open Source?
 
