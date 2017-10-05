@@ -4,12 +4,12 @@ defmodule OpenBudgetWeb.AccountControllerTest do
   alias OpenBudget.Budgets
   alias OpenBudget.Budgets.Account
 
-  @create_attrs %{type: "account", attributes: %{description: "This is an account", name: "Sample Account", category: "Cash"}}
-  @update_attrs %{type: "account", attributes: %{description: "This is an updated account", name: "Updated Sample Account", category: "Cash"}}
-  @invalid_attrs %{type: "account", attributes: %{description: nil, name: nil, category: nil}}
+  @create_attrs %{name: "Sample Account", description: "This is an account", category: "Cash"}
+  @update_attrs %{name: "Updated Sample Account", description: "This is an updated account", category: "Cash"}
+  @invalid_attrs %{name: nil, description: nil, category: nil}
 
   def fixture(:account) do
-    {:ok, account} = Budgets.create_account(%{description: "This is an account", name: "Sample Account", category: "Cash"})
+    {:ok, account} = Budgets.create_account(@create_attrs)
     account
   end
 
@@ -31,22 +31,24 @@ defmodule OpenBudgetWeb.AccountControllerTest do
 
   describe "create account" do
     test "renders account when data is valid", %{conn: conn} do
-      conn = post conn, account_path(conn, :create), data: @create_attrs
+      params = Poison.encode!(%{data: %{attributes: @create_attrs}})
+      conn = post conn, account_path(conn, :create), params
       assert %{"id" => id} = json_response(conn, 201)["data"]
       conn = get conn, account_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
         "type" => "account",
         "id" => id,
         "attributes" => %{
-          "description" => "This is an account",
           "name" => "Sample Account",
+          "description" => "This is an account",
           "category" => "Cash"
         }
       }
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, account_path(conn, :create), data: @invalid_attrs
+      params = %{data: %{attributes: @invalid_attrs}}
+      conn = post conn, account_path(conn, :create), params
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -55,20 +57,22 @@ defmodule OpenBudgetWeb.AccountControllerTest do
     setup [:create_account]
 
     test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
-      conn = put conn, account_path(conn, :update, account), data: @update_attrs
+      params = Poison.encode!(%{data: %{attributes: @update_attrs}})
+      conn = put conn, account_path(conn, :update, account), params
       assert json_response(conn, 200)["data"] == %{
         "id" => "#{id}",
         "type" => "account",
         "attributes" => %{
-          "description" => "This is an updated account",
           "name" => "Updated Sample Account",
+          "description" => "This is an updated account",
           "category" => "Cash"
         }
       }
     end
 
     test "renders errors when data is invalid", %{conn: conn, account: account} do
-      conn = put conn, account_path(conn, :update, account), data: @invalid_attrs
+      params = %{data: %{attributes: @invalid_attrs}}
+      conn = put conn, account_path(conn, :update, account), params
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
