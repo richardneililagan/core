@@ -4,7 +4,7 @@
 
 ## Overview
 
-* [OpenBudget](https://openbudget.xyz) is an open source budgeting platform inspired by popular budgeting apps like [YNAB](https://youneedabudget.com) and [GoodBudget](https://goodbudget.com).
+* [OpenBudget](https://openbudget.xyz) is an open source envelope budgeting platform inspired by popular budgeting apps like [YNAB](https://youneedabudget.com) and [GoodBudget](https://goodbudget.com).
 * This is an API backend that powers [OpenBudget UI](https://github.com/obudget/ui), which is also an open source project.
 * A public deployment of this code is maintained at [api.openbudget.xyz/api](https://api.openbudget.xyz/api)
 
@@ -14,7 +14,8 @@
 * I've been a fan of envelope budgeting since 2011 and I always found it a challenge to share my passion for budgeting with other people because a lot of the best budgeting apps are locked behind a paywall.
 * Being open source ensures that anyone who uses this software will know what's going on under the hood. e.g. Prevent unethical situations or enforcing transparency.
 * Another benefit of being open source is that anyone can contribute and improve OpenBudget for everyone.
-* This project was inspired by [OpenDota](https://www.opendota.com). Their organization's cause inspired me to go open source with this project.
+* This project was inspired by [OpenDota](https://www.opendota.com), which is an open source project for viewing data related to the popular game Dota 2. The reason why it's big and successful is because it's open source. I want to emulate what they did for this project.
+* Honestly, this endeavor is too big for 1 person to do. I want to encourage other developers who are better skilled than I am to help out in this project by going all-in on open source.
 
 ## Tech Stack
 
@@ -25,7 +26,7 @@
 ## Quick Start
 
 ```
-git clone https://github.com/odota/core.git
+git clone https://github.com/obudget/core.git
 cd core
 mix deps.get
 mix ecto.create
