@@ -10,7 +10,9 @@ defmodule OpenBudget.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -44,7 +46,8 @@ defmodule OpenBudget.Mixfile do
       {:edeliver, "~> 1.4.4"},
       {:distillery, "~> 1.4", runtime: false},
       {:mix_docker, "~> 0.5.0"},
-      {:cors_plug, "~> 1.2"}
+      {:cors_plug, "~> 1.2"},
+      {:excoveralls, "~> 0.7", only: :test}
     ]
   end
 
