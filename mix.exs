@@ -47,7 +47,9 @@ defmodule OpenBudget.Mixfile do
       {:distillery, "~> 1.4", runtime: false},
       {:mix_docker, "~> 0.5.0"},
       {:cors_plug, "~> 1.2"},
-      {:excoveralls, "~> 0.7", only: :test}
+      {:excoveralls, "~> 0.7", only: :test},
+      {:comeonin, "~> 4.0"},
+      {:argon2_elixir, "~> 1.2"}
     ]
   end
 

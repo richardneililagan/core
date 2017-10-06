@@ -17,3 +17,7 @@ config :open_budget, OpenBudget.Repo,
   database: "open_budget_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :argon2_elixir,
+  t_cost: 2,
+  m_cost: 12

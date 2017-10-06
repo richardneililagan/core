@@ -33,6 +33,7 @@ defmodule OpenBudget.AuthenticationTest do
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Authentication.create_user(@valid_attrs)
       assert user.email == "test@example.com"
+      assert user.password_hash != "secretpassword"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -49,6 +50,7 @@ defmodule OpenBudget.AuthenticationTest do
       assert {:ok, user} = Authentication.update_user(user, @update_attrs)
       assert %User{} = user
       assert user.email == "updated@example.com"
+      assert user.password_hash != "updatedsecretpassword"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
