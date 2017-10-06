@@ -11,5 +11,6 @@ defmodule OpenBudgetWeb.Router do
     pipe_through :api
 
     resources "/accounts", AccountController, except: [:new, :edit]
+    resources "/users", UserController, except: [:new, :edit]
   end
 end
