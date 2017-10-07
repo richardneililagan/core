@@ -6,10 +6,10 @@ defmodule OpenBudget.AuthenticationTest do
   describe "users" do
     alias OpenBudget.Authentication.User
 
-    @valid_attrs %{email: "test@example.com", password_hash: "secretpassword"}
-    @update_attrs %{email: "updated@example.com", password_hash: "updatedsecretpassword"}
-    @invalid_attrs %{email: nil, password_hash: nil}
-    @nonunique_attrs %{email: "test@example.com", password_hash: "secretpassword"}
+    @valid_attrs %{email: "test@example.com", password: "secretpassword"}
+    @update_attrs %{email: "updated@example.com", password: "updatedsecretpassword"}
+    @invalid_attrs %{email: nil, password: nil}
+    @nonunique_attrs %{email: "test@example.com", password: "secretpassword"}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -17,7 +17,7 @@ defmodule OpenBudget.AuthenticationTest do
         |> Enum.into(@valid_attrs)
         |> Authentication.create_user()
 
-      user
+      %{user | password: nil}
     end
 
     test "list_users/0 returns all users" do

@@ -4,9 +4,9 @@ defmodule OpenBudgetWeb.UserControllerTest do
   alias OpenBudget.Authentication
   alias OpenBudget.Authentication.User
 
-  @create_attrs %{email: "test@example.com", password_hash: "secretpassword"}
-  @update_attrs %{email: "updated@example.com", password_hash: "updatedsecretpassword"}
-  @invalid_attrs %{email: nil, password_hash: nil}
+  @create_attrs %{email: "test@example.com", password: "secretpassword"}
+  @update_attrs %{email: "updated@example.com", password: "updatedsecretpassword"}
+  @invalid_attrs %{email: nil, password: nil}
 
   def fixture(:user) do
     {:ok, user} = Authentication.create_user(@create_attrs)
