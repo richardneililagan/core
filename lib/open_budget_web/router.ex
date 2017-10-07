@@ -7,6 +7,14 @@ defmodule OpenBudgetWeb.Router do
     plug JaSerializer.Deserializer
   end
 
+  pipeline :api_auth do
+    plug :accepts, ["json-api"]
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.EnsureAuthenticated, handler: OpenBudgetWeb.EnsureAuthenticatedController
+    plug Guardian.Plug.LoadResource
+    plug JaSerializer.Deserializer
+  end
+
   scope "/api", OpenBudgetWeb do
     pipe_through :api
 
