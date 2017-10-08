@@ -25,6 +25,8 @@ defmodule OpenBudgetWeb.Router do
   end
 
   scope "/api/auth", OpenBudgetWeb do
+    pipe_through :api
+
     resources "/token", TokenController, only: [:create]
     delete "/token", TokenController, :delete
   end
