@@ -14,8 +14,11 @@ defmodule OpenBudgetWeb.Authentication do
       iex> sign_in_by_email_and_password(conn, %{"email" => "valid@example.com", "password" => "secretpass"})
       {:ok, conn}
 
-      iex> sign_in_by_email_and_password(conn, %{"email" => "invalid@example.com", "password" => "secretpass"})
+      iex> sign_in_by_email_and_password(conn, %{"email" => "valid@example.com", "password" => "wrongpass"})
       {:error, :unauthorized, conn}
+
+      iex> sign_in_by_email_and_password(conn, %{"email" => "invalid@example.com", "password" => "wrongpass"})
+      {:error, :not_found, conn}
   """
   def sign_in_by_email_and_password(conn, %{"email" => email, "password" => password}) do
     user = Repo.get_by(User, email: email)
