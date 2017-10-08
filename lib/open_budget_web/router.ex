@@ -23,4 +23,9 @@ defmodule OpenBudgetWeb.Router do
     resources "/accounts", AccountController, except: [:new, :edit]
     resources "/users", UserController, except: [:new, :edit]
   end
+
+  scope "/api/auth", OpenBudgetWeb do
+    resources "/token", TokenController, only: [:create]
+    delete "/token", TokenController, :delete
+  end
 end
