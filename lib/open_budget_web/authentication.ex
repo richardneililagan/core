@@ -6,6 +6,7 @@ defmodule OpenBudgetWeb.Authentication do
 
   alias OpenBudget.Repo
   alias OpenBudget.Authentication.User
+  alias OpenBudget.Authentication.Guardian.Plug
 
   @doc """
   Authenticates a user using an email and password combination
@@ -36,6 +37,6 @@ defmodule OpenBudgetWeb.Authentication do
 
   defp sign_in(conn, user) do
     conn
-    |> OpenBudget.Authentication.Guardian.Plug.sign_in(user)
+    |> Plug.sign_in(user)
   end
 end
