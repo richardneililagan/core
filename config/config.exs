@@ -29,6 +29,10 @@ config :mime, :types, %{
   "application/vnd.api+json" => ["json-api"]
 }
 
+config :open_budget, OpenBudget.Authentication.Guardian,
+  issuer: "open_budget",
+  secret_key: System.get_env("GUARDIAN_SECRET") || "3vn8oLtBtNCR5JDBK4bCS+fVbJmYrK9GA2BzF7wr78HLLrTvoTeHljLXDIT/22kO"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

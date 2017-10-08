@@ -6,10 +6,10 @@ defmodule OpenBudget.AuthenticationTest do
   describe "users" do
     alias OpenBudget.Authentication.User
 
-    @valid_attrs %{email: "test@example.com", password_hash: "secretpassword"}
-    @update_attrs %{email: "updated@example.com", password_hash: "updatedsecretpassword"}
-    @invalid_attrs %{email: nil, password_hash: nil}
-    @nonunique_attrs %{email: "test@example.com", password_hash: "secretpassword"}
+    @valid_attrs %{email: "test@example.com", password: "secretpassword"}
+    @update_attrs %{email: "updated@example.com", password: "updatedsecretpassword"}
+    @invalid_attrs %{email: nil, password: nil}
+    @nonunique_attrs %{email: "test@example.com", password: "secretpassword"}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -17,7 +17,7 @@ defmodule OpenBudget.AuthenticationTest do
         |> Enum.into(@valid_attrs)
         |> Authentication.create_user()
 
-      user
+      %{user | password: nil}
     end
 
     test "list_users/0 returns all users" do
@@ -33,6 +33,7 @@ defmodule OpenBudget.AuthenticationTest do
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Authentication.create_user(@valid_attrs)
       assert user.email == "test@example.com"
+      assert user.password_hash != "secretpassword"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -49,6 +50,7 @@ defmodule OpenBudget.AuthenticationTest do
       assert {:ok, user} = Authentication.update_user(user, @update_attrs)
       assert %User{} = user
       assert user.email == "updated@example.com"
+      assert user.password_hash != "updatedsecretpassword"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
