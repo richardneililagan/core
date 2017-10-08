@@ -1,6 +1,8 @@
 defmodule OpenBudgetWeb.Router do
   use OpenBudgetWeb, :router
 
+  alias OpenBudgetWeb.EnsureAuthenticatedController, as: EnsureAuthenticated
+
   pipeline :api do
     plug :accepts, ["json-api"]
     plug JaSerializer.ContentTypeNegotiation
@@ -10,7 +12,7 @@ defmodule OpenBudgetWeb.Router do
   pipeline :api_auth do
     plug :accepts, ["json-api"]
     plug Guardian.Plug.VerifyHeader, realm: "Bearer"
-    plug Guardian.Plug.EnsureAuthenticated, handler: OpenBudgetWeb.EnsureAuthenticatedController
+    plug Guardian.Plug.EnsureAuthenticated, handler: EnsureAuthenticated
     plug Guardian.Plug.LoadResource
     plug JaSerializer.Deserializer
   end
