@@ -2,6 +2,7 @@ defmodule OpenBudget.BudgetsTest do
   use OpenBudget.DataCase
 
   alias OpenBudget.Budgets
+  alias OpenBudget.Authentication
 
   describe "accounts" do
     alias OpenBudget.Budgets.Account
@@ -64,6 +65,97 @@ defmodule OpenBudget.BudgetsTest do
     test "change_account/1 returns a account changeset" do
       account = account_fixture()
       assert %Ecto.Changeset{} = Budgets.change_account(account)
+    end
+  end
+
+  describe "budgets" do
+    alias OpenBudget.Budgets.Budget
+
+    @valid_attrs %{name: "Sample Budget", description: "This is a sample budget"}
+    @update_attrs %{name: "Updated Sample Budget", description: "This is an updated sample budget"}
+    @invalid_attrs %{name: nil, description: nil}
+
+    def budget_fixture(attrs \\ %{}) do
+      {:ok, budget} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Budgets.create_budget()
+
+      budget
+    end
+
+    def user_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        attrs
+        |> Enum.into(%{email: "test@example.com", password: "password"})
+        |> Authentication.create_user()
+
+      user
+    end
+
+    test "list_budgets/0 returns all budgets" do
+      budget = budget_fixture()
+      assert Budgets.list_budgets() == [budget]
+    end
+
+    test "get_budget!/1 returns the budget with given id" do
+      budget = budget_fixture()
+      assert Budgets.get_budget!(budget.id) == budget
+    end
+
+    test "create_budget/1 with valid data creates a budget" do
+      assert {:ok, %Budget{} = budget} = Budgets.create_budget(@valid_attrs)
+      assert budget.name == "Sample Budget"
+      assert budget.description == "This is a sample budget"
+    end
+
+    test "create_budget/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Budgets.create_budget(@invalid_attrs)
+    end
+
+    test "update_budget/2 with valid data updates the budget" do
+      budget = budget_fixture()
+      assert {:ok, budget} = Budgets.update_budget(budget, @update_attrs)
+      assert %Budget{} = budget
+      assert budget.name == "Updated Sample Budget"
+      assert budget.description == "This is an updated sample budget"
+    end
+
+    test "update_budget/2 with invalid data returns error changeset" do
+      budget = budget_fixture()
+      assert {:error, %Ecto.Changeset{}} = Budgets.update_budget(budget, @invalid_attrs)
+      assert budget == Budgets.get_budget!(budget.id)
+    end
+
+    test "delete_budget/1 deletes the budget" do
+      budget = budget_fixture()
+      assert {:ok, %Budget{}} = Budgets.delete_budget(budget)
+      assert_raise Ecto.NoResultsError, fn -> Budgets.get_budget!(budget.id) end
+    end
+
+    test "change_budget/1 returns a budget changeset" do
+      budget = budget_fixture()
+      assert %Ecto.Changeset{} = Budgets.change_budget(budget)
+    end
+
+    test "associate_user_to_budget/2 associates a user to a budget" do
+      budget = budget_fixture()
+      user = user_fixture()
+      result = Budgets.associate_user_to_budget(budget, user)
+      user_result = hd(result)
+      assert Kernel.length(result) == 1
+      assert user_result.email == "test@example.com"
+    end
+
+    test "associate_user_to_budget/2 associates a user to a budget with an existing user association" do
+      budget = budget_fixture()
+      existing_user = user_fixture(%{email: "existing@example.com", password: "existingpassword"})
+      user = user_fixture()
+      Budgets.associate_user_to_budget(budget, existing_user)
+      result = Budgets.associate_user_to_budget(budget, user)
+      user_result = hd(result)
+      assert Kernel.length(result) == 2
+      assert user_result.email == "existing@example.com"
     end
   end
 end

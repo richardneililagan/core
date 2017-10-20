@@ -35,7 +35,8 @@ defmodule OpenBudgetWeb.Authentication do
     end
   end
 
-  defp sign_in(conn, user) do
+  @doc false
+  def sign_in(conn, user) do
     conn
     |> Plug.sign_in(user)
   end
