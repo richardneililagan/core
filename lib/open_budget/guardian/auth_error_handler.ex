@@ -2,10 +2,11 @@ defmodule OpenBudget.Guardian.AuthErrorHandler do
   @moduledoc """
   Handler required by Guardian pipeline
   """
-  import Plug.Conn
+  use OpenBudgetWeb, :controller
 
-  def auth_error(conn, {type, reason}, _opts) do
-    body = Poison.encode!(%{message: to_string(type)})
-    send_resp(conn, 401, body)
+  def auth_error(conn, _error, _opts) do
+    conn
+    |> put_status(401)
+    |> render(OpenBudgetWeb.ErrorView, "401.json-api")
   end
 end
