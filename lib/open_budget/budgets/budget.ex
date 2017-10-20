@@ -5,10 +5,13 @@ defmodule OpenBudget.Budgets.Budget do
   use Ecto.Schema
   import Ecto.Changeset
   alias OpenBudget.Budgets.Budget
+  alias OpenBudget.Budgets.BudgetUser
+  alias OpenBudget.Authentication.User
 
   schema "budgets" do
     field :description, :string
     field :name, :string
+    many_to_many :users, User, join_through: BudgetUser, unique: true
 
     timestamps()
   end

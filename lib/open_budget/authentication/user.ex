@@ -10,12 +10,15 @@ defmodule OpenBudget.Authentication.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias OpenBudget.Authentication.User
+  alias OpenBudget.Budgets.BudgetUser
   alias Comeonin.Argon2
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    many_to_many :budgets, OpenBudget.Budgets.Budget,
+                join_through: BudgetUser, unique: true
 
     timestamps()
   end

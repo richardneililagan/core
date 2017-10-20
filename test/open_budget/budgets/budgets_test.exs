@@ -2,6 +2,7 @@ defmodule OpenBudget.BudgetsTest do
   use OpenBudget.DataCase
 
   alias OpenBudget.Budgets
+  alias OpenBudget.Authentication
 
   describe "accounts" do
     alias OpenBudget.Budgets.Account
@@ -83,6 +84,15 @@ defmodule OpenBudget.BudgetsTest do
       budget
     end
 
+    def user_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        attrs
+        |> Enum.into(%{email: "test@example.com", password: "password"})
+        |> Authentication.create_user()
+
+      user
+    end
+
     test "list_budgets/0 returns all budgets" do
       budget = budget_fixture()
       assert Budgets.list_budgets() == [budget]
@@ -126,6 +136,26 @@ defmodule OpenBudget.BudgetsTest do
     test "change_budget/1 returns a budget changeset" do
       budget = budget_fixture()
       assert %Ecto.Changeset{} = Budgets.change_budget(budget)
+    end
+
+    test "associate_user_to_budget/2 associates a user to a budget" do
+      budget = budget_fixture()
+      user = user_fixture()
+      result = Budgets.associate_user_to_budget(budget, user)
+      user_result = hd(result)
+      assert Kernel.length(result) == 1
+      assert user_result.email == "test@example.com"
+    end
+
+    test "associate_user_to_budget/2 associates a user to a budget with an existing user association" do
+      budget = budget_fixture()
+      existing_user = user_fixture(%{email: "existing@example.com", password: "existingpassword"})
+      user = user_fixture()
+      Budgets.associate_user_to_budget(budget, existing_user)
+      result = Budgets.associate_user_to_budget(budget, user)
+      user_result = hd(result)
+      assert Kernel.length(result) == 2
+      assert user_result.email == "existing@example.com"
     end
   end
 end
