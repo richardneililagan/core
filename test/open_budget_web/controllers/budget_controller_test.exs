@@ -1,9 +1,11 @@
 defmodule OpenBudgetWeb.BudgetControllerTest do
   use OpenBudgetWeb.ConnCase
 
+  alias OpenBudget.Repo
   alias OpenBudget.Budgets
   alias OpenBudget.Budgets.Budget
   alias OpenBudget.Authentication
+  alias OpenBudget.Authentication.User
   alias OpenBudgetWeb.Authentication, as: WebAuth
 
   @create_attrs %{name: "Sample Budget", description: "This is a sample budget"}
@@ -43,10 +45,13 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     test "renders budget when data is valid", %{conn: conn} do
       params = Poison.encode!(%{data: %{attributes: @create_attrs}})
       conn = post conn, budget_path(conn, :create), params
-      assert json_response(conn, 201)["data"]["attributes"] == %{
+      response = json_response(conn, 201)["data"]
+
+      assert response["attributes"] == %{
         "name" => "Sample Budget",
         "description" => "This is a sample budget"
       }
+      assert length(response["relationships"]["users"]["data"]) == 1
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -59,17 +64,19 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
   describe "update budget" do
     setup [:create_budget]
 
-    test "renders budget when data is valid", %{conn: conn, budget: %Budget{id: id} = budget} do
+    test "renders budget when data is valid", %{conn: conn, budget: %Budget{id: _id} = budget} do
+      user = Repo.get_by(User, email: "test@example.com")
+      Budgets.associate_user_to_budget(budget, user)
+
       params = Poison.encode!(%{data: %{attributes: @update_attrs}})
       conn = put conn, budget_path(conn, :update, budget), params
-      assert json_response(conn, 200)["data"] == %{
-        "type" => "budget",
-        "id" => "#{id}",
-        "attributes" => %{
-          "name" => "Updated Sample Budget",
-          "description" => "This is an updated sample budget"
-        }
+      response = json_response(conn, 200)["data"]
+
+      assert response["attributes"] == %{
+        "name" => "Updated Sample Budget",
+        "description" => "This is an updated sample budget"
       }
+      assert length(response["relationships"]["users"]["data"]) == 1
     end
 
     test "renders errors when data is invalid", %{conn: conn, budget: budget} do

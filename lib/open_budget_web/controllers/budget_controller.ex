@@ -1,9 +1,11 @@
 defmodule OpenBudgetWeb.BudgetController do
   use OpenBudgetWeb, :controller
 
+  alias OpenBudget.Repo
   alias OpenBudget.Budgets
   alias OpenBudget.Budgets.Budget
   alias JaSerializer.Params
+  alias Guardian.Plug
 
   action_fallback OpenBudgetWeb.FallbackController
 
@@ -16,10 +18,16 @@ defmodule OpenBudgetWeb.BudgetController do
     attrs = Params.to_attributes(data)
     with {:ok, %Budget{} = budget} <-
         Budgets.create_budget(attrs) do
+      current_user = Plug.current_resource(conn)
+      Budgets.associate_user_to_budget(budget, current_user)
+      budget =
+        budget
+        |> Repo.preload(:users)
+
       conn
       |> put_status(:created)
       |> put_resp_header("location", budget_path(conn, :show, budget))
-      |> render("show.json-api", data: budget)
+      |> render("show.json-api", data: budget, opts: [include: "users"])
     end
   end
 
@@ -29,12 +37,12 @@ defmodule OpenBudgetWeb.BudgetController do
   end
 
   def update(conn, %{"id" => id, "data" => data}) do
-    budget = Budgets.get_budget!(id)
+    budget = Repo.preload(Budgets.get_budget!(id), :users)
     attrs = Params.to_attributes(data)
 
     with {:ok, %Budget{} = budget} <-
         Budgets.update_budget(budget, attrs) do
-      render(conn, "show.json-api", data: budget)
+      render(conn, "show.json-api", data: budget, opts: [include: "users"])
     end
   end
 
