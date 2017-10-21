@@ -42,10 +42,16 @@ defmodule OpenBudgetWeb.UserControllerTest do
         conn
         |> WebAuth.sign_in(user)
         |> get(user_path(conn, :show, user.id))
-      response = json_response(conn, 200)["data"]
 
-      assert response["attributes"] == %{
-        "email" => "test@example.com"
+      assert json_response(conn, 200)["data"] == %{
+        "type" => "user",
+        "id" => "#{user.id}",
+        "attributes" => %{
+          "email" => "test@example.com"
+        },
+        "links" => %{
+          "self" => "/users/#{user.id}"
+        }
       }
     end
   end
