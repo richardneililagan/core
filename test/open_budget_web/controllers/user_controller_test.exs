@@ -3,6 +3,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
 
   alias OpenBudget.Authentication
   alias OpenBudget.Authentication.User
+  alias OpenBudgetWeb.Authentication, as: WebAuth
 
   @create_attrs %{email: "test@example.com", password: "secretpassword"}
   @update_attrs %{email: "updated@example.com", password: "updatedsecretpassword"}
@@ -24,8 +25,34 @@ defmodule OpenBudgetWeb.UserControllerTest do
 
   describe "index" do
     test "lists all users", %{conn: conn} do
-      conn = get conn, user_path(conn, :index)
-      assert json_response(conn, 200)["data"] == []
+      user = fixture(:user)
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> get(user_path(conn, :index))
+
+      assert length(json_response(conn, 200)["data"]) == 1
+    end
+  end
+
+  describe "show" do
+    test "display a user", %{conn: conn} do
+      user = fixture(:user)
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> get(user_path(conn, :show, user.id))
+
+      assert json_response(conn, 200)["data"] == %{
+        "type" => "user",
+        "id" => "#{user.id}",
+        "attributes" => %{
+          "email" => "test@example.com"
+        },
+        "links" => %{
+          "self" => "/users/#{user.id}"
+        }
+      }
     end
   end
 
@@ -33,15 +60,10 @@ defmodule OpenBudgetWeb.UserControllerTest do
     test "renders user when data is valid", %{conn: conn} do
       params = Poison.encode!(%{data: %{attributes: @create_attrs}})
       conn = post conn, user_path(conn, :create), params
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      response = json_response(conn, 201)["data"]
 
-      conn = get conn, user_path(conn, :show, id)
-      assert json_response(conn, 200)["data"] == %{
-        "type" => "user",
-        "id" => id,
-        "attributes" => %{
-          "email" => "test@example.com"
-        }
+      assert response["attributes"] == %{
+        "email" => "test@example.com"
       }
     end
 
@@ -55,21 +77,25 @@ defmodule OpenBudgetWeb.UserControllerTest do
   describe "update user" do
     setup [:create_user]
 
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
+    test "renders user when data is valid", %{conn: conn, user: %User{id: _id} = user} do
       params = Poison.encode!(%{data: %{attributes: @update_attrs}})
-      conn = put conn, user_path(conn, :update, user), params
-      assert json_response(conn, 200)["data"] == %{
-        "type" => "user",
-        "id" => "#{id}",
-        "attributes" => %{
-          "email" => "updated@example.com"
-        }
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> put(user_path(conn, :update, user), params)
+      response = json_response(conn, 200)["data"]
+
+      assert response["attributes"] == %{
+        "email" => "updated@example.com"
       }
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
       params = %{data: %{attributes: @invalid_attrs}}
-      conn = put conn, user_path(conn, :update, user), params
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> put(user_path(conn, :update, user), params)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -78,11 +104,11 @@ defmodule OpenBudgetWeb.UserControllerTest do
     setup [:create_user]
 
     test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete conn, user_path(conn, :delete, user)
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> delete(user_path(conn, :delete, user))
       assert response(conn, 204)
-      assert_error_sent 404, fn ->
-        get conn, user_path(conn, :show, user)
-      end
     end
   end
 
