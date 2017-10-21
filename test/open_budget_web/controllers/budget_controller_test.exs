@@ -12,18 +12,24 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
   @update_attrs %{name: "Updated Sample Budget", description: "This is an updated sample budget"}
   @invalid_attrs %{name: nil, description: nil}
 
-  def fixture(:budget) do
-    {:ok, budget} = Budgets.create_budget(@create_attrs)
+  def budget_fixture(attrs \\ %{}) do
+    {:ok, budget} =
+      attrs
+      |> Enum.into(@create_attrs)
+      |> Budgets.create_budget()
     budget
   end
 
-  def fixture(:user) do
-    {:ok, user} = Authentication.create_user(%{email: "test@example.com", password: "password"})
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(%{email: "test@example.com", password: "password"})
+      |> Authentication.create_user()
     user
   end
 
   setup %{conn: conn} do
-    user = fixture(:user)
+    user = user_fixture()
 
     conn =
       conn
@@ -96,7 +102,7 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
   end
 
   defp create_budget(_) do
-    budget = fixture(:budget)
+    budget = budget_fixture()
     {:ok, budget: budget}
   end
 end
