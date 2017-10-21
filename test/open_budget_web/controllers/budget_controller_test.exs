@@ -42,8 +42,9 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
 
   describe "index" do
     test "lists all budgets", %{conn: conn} do
+      budget_fixture()
       conn = get conn, budget_path(conn, :index)
-      assert json_response(conn, 200)["data"] == []
+      assert length(json_response(conn, 200)["data"]) == 1
     end
   end
 
