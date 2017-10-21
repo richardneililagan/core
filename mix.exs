@@ -50,7 +50,8 @@ defmodule OpenBudget.Mixfile do
       {:excoveralls, "~> 0.7", only: :test},
       {:comeonin, "~> 4.0"},
       {:argon2_elixir, "~> 1.2"},
-      {:guardian, "~> 1.0-beta"}
+      {:guardian, "~> 1.0-beta"},
+      {:inch_ex, "~> 0.5", only: [:dev, :test]}
     ]
   end
 
