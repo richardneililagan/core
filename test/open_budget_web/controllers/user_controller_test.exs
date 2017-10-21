@@ -35,6 +35,21 @@ defmodule OpenBudgetWeb.UserControllerTest do
     end
   end
 
+  describe "show" do
+    test "display a user", %{conn: conn} do
+      user = fixture(:user)
+      conn =
+        conn
+        |> WebAuth.sign_in(user)
+        |> get(user_path(conn, :show, user.id))
+      response = json_response(conn, 200)["data"]
+
+      assert response["attributes"] == %{
+        "email" => "test@example.com"
+      }
+    end
+  end
+
   describe "create user" do
     test "renders user when data is valid", %{conn: conn} do
       params = Poison.encode!(%{data: %{attributes: @create_attrs}})
