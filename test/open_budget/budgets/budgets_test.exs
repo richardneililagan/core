@@ -98,6 +98,13 @@ defmodule OpenBudget.BudgetsTest do
       assert Budgets.list_budgets() == [budget]
     end
 
+    test "list_budgets/1 returns all budgets associated with the user" do
+      user = user_fixture()
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      assert Budgets.list_budgets(user) == [budget]
+    end
+
     test "get_budget!/1 returns the budget with given id" do
       budget = budget_fixture()
       assert Budgets.get_budget!(budget.id) == budget

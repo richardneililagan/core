@@ -120,6 +120,22 @@ defmodule OpenBudget.Budgets do
   end
 
   @doc """
+  Returns the list of budgets associated with the user specified.
+
+  ## Examples
+
+      iex> list_budgets(user)
+      [%Budget{}, ...]
+
+  """
+  def list_budgets(user) do
+    Repo.all(from b in Budget,
+            left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+            left_join: u in User, on: u.id == bu.user_id,
+            where: u.id == ^user.id)
+  end
+
+  @doc """
   Gets a single budget.
 
   Raises `Ecto.NoResultsError` if the Budget does not exist.

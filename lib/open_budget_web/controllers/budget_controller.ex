@@ -10,7 +10,8 @@ defmodule OpenBudgetWeb.BudgetController do
   action_fallback OpenBudgetWeb.FallbackController
 
   def index(conn, _params) do
-    budgets = Budgets.list_budgets()
+    current_user = Plug.current_resource(conn)
+    budgets = Budgets.list_budgets(current_user)
     render(conn, "index.json-api", data: budgets)
   end
 

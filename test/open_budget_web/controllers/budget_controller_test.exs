@@ -42,8 +42,20 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
 
   describe "index" do
     test "lists all budgets", %{conn: conn} do
-      budget_fixture()
+      user = Repo.get_by(User, %{email: "test@example.com"})
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
       conn = get conn, budget_path(conn, :index)
+      assert length(json_response(conn, 200)["data"]) == 1
+    end
+
+    test "list only budgets associated to the user", %{conn: conn} do
+      user = Repo.get_by(User, %{email: "test@example.com"})
+      budget_fixture()
+      budget = budget_fixture(%{name: "Associated Budget", category: "Cash"})
+      Budgets.associate_user_to_budget(budget, user)
+      conn = get conn, budget_path(conn, :index)
+
       assert length(json_response(conn, 200)["data"]) == 1
     end
   end
