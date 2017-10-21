@@ -17,13 +17,14 @@ defmodule OpenBudgetWeb.Router do
     pipe_through :api
 
     resources "/accounts", AccountController, except: [:new, :edit]
-    resources "/users", UserController, except: [:new, :edit]
+    resources "/users", UserController, only: [:create]
   end
 
   scope "/api", OpenBudgetWeb do
     pipe_through :api_auth
 
     resources "/budgets", BudgetController, except: [:new, :edit]
+    resources "/users", UserController, except: [:new, :edit, :create]
   end
 
   scope "/api/auth", OpenBudgetWeb do
