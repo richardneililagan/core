@@ -162,8 +162,18 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     setup [:create_budget]
 
     test "deletes chosen budget", %{conn: conn, budget: budget} do
+      user = Repo.get_by(User, email: "test@example.com")
+      Budgets.associate_user_to_budget(budget, user)
       conn = delete conn, budget_path(conn, :delete, budget)
       assert response(conn, 204)
+    end
+
+    test "renders error when budget is not associated with current user", %{conn: conn, budget: budget} do
+      conn = delete conn, budget_path(conn, :delete, budget)
+      assert json_response(conn, 404)["errors"] == [%{
+        "title" => "Resource not found",
+        "code" => 404
+      }]
     end
   end
 

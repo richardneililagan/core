@@ -65,9 +65,20 @@ defmodule OpenBudgetWeb.BudgetController do
   end
 
   def delete(conn, %{"id" => id}) do
-    {:ok, budget} = Budgets.get_budget(id)
-    with {:ok, %Budget{}} <- Budgets.delete_budget(budget) do
-      send_resp(conn, :no_content, "")
+    current_user = Plug.current_resource(conn)
+    case Budgets.get_budget(id, current_user) do
+      {:ok, budget} ->
+        case Budgets.delete_budget(budget) do
+          {:ok, _} -> send_resp(conn, :no_content, "")
+          {:error, _} ->
+            conn
+            |> put_status(422)
+            |> render(OpenBudgetWeb.ErrorView, "422.json-api")
+        end
+      {:error, _} ->
+        conn
+        |> put_status(404)
+        |> render(OpenBudgetWeb.ErrorView, "404.json-api")
     end
   end
 end
