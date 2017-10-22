@@ -5,7 +5,7 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
   alias OpenBudget.Budgets
   alias OpenBudget.Authentication
   alias OpenBudget.Authentication.User
-  alias OpenBudgetWeb.Authentication, as: WebAuth
+  alias OpenBudget.Guardian.Authentication, as: GuardianAuth
 
   @create_attrs %{name: "Sample Budget", description: "This is a sample budget"}
   @update_attrs %{name: "Updated Sample Budget", description: "This is an updated sample budget"}
@@ -34,7 +34,7 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       conn
       |> put_req_header("accept", "application/vnd.api+json")
       |> put_req_header("content-type", "application/vnd.api+json")
-      |> WebAuth.sign_in(user)
+      |> GuardianAuth.sign_in(user)
 
     {:ok, conn: conn}
   end

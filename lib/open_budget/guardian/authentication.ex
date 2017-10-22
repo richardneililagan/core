@@ -1,4 +1,4 @@
-defmodule OpenBudgetWeb.Authentication do
+defmodule OpenBudget.Guardian.Authentication do
   @moduledoc """
   Module containing the different methods for authenticating users
   """
@@ -6,7 +6,7 @@ defmodule OpenBudgetWeb.Authentication do
 
   alias OpenBudget.Repo
   alias OpenBudget.Authentication.User
-  alias OpenBudget.Authentication.Guardian.Plug
+  alias OpenBudget.Guardian.Plug
 
   @doc """
   Authenticates a user using an email and password combination

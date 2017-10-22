@@ -1,9 +1,9 @@
 defmodule OpenBudgetWeb.TokenController do
   use OpenBudgetWeb, :controller
 
-  alias OpenBudget.Authentication.Guardian.Plug
+  alias OpenBudget.Guardian.Plug
   alias JaSerializer.Params
-  import OpenBudgetWeb.Authentication
+  import OpenBudget.Guardian.Authentication
 
   def create(conn, %{"data" => data}) do
     attrs = Params.to_attributes(data)

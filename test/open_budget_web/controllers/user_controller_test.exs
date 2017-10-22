@@ -3,7 +3,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
 
   alias OpenBudget.Authentication
   alias OpenBudget.Authentication.User
-  alias OpenBudgetWeb.Authentication, as: WebAuth
+  alias OpenBudget.Guardian.Authentication, as: GuardianAuth
 
   @create_attrs %{email: "test@example.com", password: "secretpassword"}
   @update_attrs %{email: "updated@example.com", password: "updatedsecretpassword"}
@@ -28,7 +28,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
       user = fixture(:user)
       conn =
         conn
-        |> WebAuth.sign_in(user)
+        |> GuardianAuth.sign_in(user)
         |> get(user_path(conn, :index))
 
       assert length(json_response(conn, 200)["data"]) == 1
@@ -40,7 +40,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
       user = fixture(:user)
       conn =
         conn
-        |> WebAuth.sign_in(user)
+        |> GuardianAuth.sign_in(user)
         |> get(user_path(conn, :show, user.id))
 
       assert json_response(conn, 200)["data"] == %{
@@ -81,7 +81,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
       params = Poison.encode!(%{data: %{attributes: @update_attrs}})
       conn =
         conn
-        |> WebAuth.sign_in(user)
+        |> GuardianAuth.sign_in(user)
         |> put(user_path(conn, :update, user), params)
       response = json_response(conn, 200)["data"]
 
@@ -94,7 +94,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
       params = %{data: %{attributes: @invalid_attrs}}
       conn =
         conn
-        |> WebAuth.sign_in(user)
+        |> GuardianAuth.sign_in(user)
         |> put(user_path(conn, :update, user), params)
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -106,7 +106,7 @@ defmodule OpenBudgetWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn, user: user} do
       conn =
         conn
-        |> WebAuth.sign_in(user)
+        |> GuardianAuth.sign_in(user)
         |> delete(user_path(conn, :delete, user))
       assert response(conn, 204)
     end
