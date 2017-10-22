@@ -33,8 +33,14 @@ defmodule OpenBudgetWeb.BudgetController do
   end
 
   def show(conn, %{"id" => id}) do
-    budget = Budgets.get_budget!(id)
+    current_user = Plug.current_resource(conn)
+    budget = Budgets.get_budget!(id, current_user)
     render(conn, "show.json-api", data: budget)
+  rescue
+    Ecto.NoResultsError ->
+      conn
+      |> put_status(404)
+      |> render(OpenBudgetWeb.ErrorView, "404.json-api")
   end
 
   def update(conn, %{"id" => id, "data" => data}) do

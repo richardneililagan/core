@@ -60,6 +60,45 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     end
   end
 
+  describe "show" do
+    test "render budget associated with the current user", %{conn: conn} do
+      user = Repo.get_by(User, %{email: "test@example.com"})
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      conn = get conn, budget_path(conn, :show, budget.id)
+
+      assert json_response(conn, 200)["data"] == %{
+        "type" => "budget",
+        "id" => "#{budget.id}",
+        "attributes" => %{
+          "name" => "Sample Budget",
+          "description" => "This is a sample budget"
+        },
+        "links" => %{
+          "self" => "/budgets/#{budget.id}"
+        },
+        "relationships" => %{
+          "users" => %{
+            "links" => %{
+              "related" => "/budgets/#{budget.id}/users"
+            }
+          }
+        }
+      }
+    end
+
+    test "render error when queried budget is not associated with user", %{conn: conn} do
+      budget = budget_fixture()
+      conn = get conn, budget_path(conn, :show, budget.id)
+
+      assert conn.status == 404
+      assert json_response(conn, 404)["errors"] == [%{
+        "title" => "Resource not found",
+        "code" => 404
+      }]
+    end
+  end
+
   describe "create budget" do
     test "renders budget when data is valid", %{conn: conn} do
       params = Poison.encode!(%{data: %{attributes: @create_attrs}})
