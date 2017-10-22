@@ -1,8 +1,8 @@
-defmodule OpenBudget.Authentication.GuardianTest do
+defmodule OpenBudget.GuardianTest do
   use OpenBudget.DataCase
 
   alias OpenBudget.Authentication
-  alias OpenBudget.Authentication.Guardian
+  alias OpenBudget.Guardian
 
   @user_attrs %{email: "test@example.com", password: "secretpassword"}
 

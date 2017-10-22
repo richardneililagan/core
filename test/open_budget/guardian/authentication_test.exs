@@ -1,8 +1,8 @@
-defmodule OpenBudgetWeb.AuthenticationTest do
+defmodule OpenBudget.Guardian.AuthenticationTest do
   use OpenBudgetWeb.ConnCase
 
   alias OpenBudget.Authentication, as: AuthContext
-  alias OpenBudgetWeb.Authentication
+  alias OpenBudget.Guardian.Authentication
 
   @user_attrs %{email: "test@example.com", password: "secretpassword"}
 

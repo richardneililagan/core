@@ -1,4 +1,4 @@
-defmodule OpenBudget.Authentication.Guardian do
+defmodule OpenBudget.Guardian do
   @moduledoc """
   Module required to map Guardian into OpenBudget
   """
