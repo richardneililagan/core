@@ -122,7 +122,7 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
   describe "update budget" do
     setup [:create_budget]
 
-    test "renders budget when data is valid", %{conn: conn, budget: %Budget{id: _id} = budget} do
+    test "renders budget when data is valid", %{conn: conn, budget: budget} do
       user = Repo.get_by(User, email: "test@example.com")
       Budgets.associate_user_to_budget(budget, user)
 
@@ -138,9 +138,23 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, budget: budget} do
+      user = Repo.get_by(User, email: "test@example.com")
+      Budgets.associate_user_to_budget(budget, user)
       params = %{data: %{attributes: @invalid_attrs}}
       conn = put conn, budget_path(conn, :update, budget), params
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 422)["errors"] == [%{
+        "title" => "Unprocessable entity",
+        "code" => 422
+      }]
+    end
+
+    test "renders error when budget is not associated with current user", %{conn: conn, budget: budget} do
+      params = %{data: %{attributes: @update_attrs}}
+      conn = put conn, budget_path(conn, :update, budget), params
+      assert json_response(conn, 404)["errors"] == [%{
+        "title" => "Resource not found",
+        "code" => 404
+      }]
     end
   end
 

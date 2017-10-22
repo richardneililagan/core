@@ -44,13 +44,23 @@ defmodule OpenBudgetWeb.BudgetController do
   end
 
   def update(conn, %{"id" => id, "data" => data}) do
-    {:ok, budget} = Budgets.get_budget(id)
-    budget = Repo.preload(budget, :users)
-    attrs = Params.to_attributes(data)
+    current_user = Plug.current_resource(conn)
+    case Budgets.get_budget(id, current_user) do
+      {:ok, budget} ->
+        budget = Repo.preload(budget, :users)
+        attrs = Params.to_attributes(data)
 
-    with {:ok, %Budget{} = budget} <-
-        Budgets.update_budget(budget, attrs) do
-      render(conn, "show.json-api", data: budget, opts: [include: "users"])
+        case Budgets.update_budget(budget, attrs) do
+          {:ok, budget} -> render(conn, "show.json-api", data: budget, opts: [include: "users"])
+          {:error, _} ->
+            conn
+            |> put_status(422)
+            |> render(OpenBudgetWeb.ErrorView, "422.json-api")
+        end
+      {:error, _} ->
+        conn
+        |> put_status(404)
+        |> render(OpenBudgetWeb.ErrorView, "404.json-api")
     end
   end
 
