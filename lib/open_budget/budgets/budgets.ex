@@ -196,6 +196,22 @@ defmodule OpenBudget.Budgets do
     |> Repo.insert()
   end
 
+  def create_budget(attrs, user) do
+    changeset =
+      %Budget{}
+      |> Budget.changeset(attrs)
+      |> Repo.insert()
+
+    case changeset do
+      {:ok, budget} ->
+        associate_user_to_budget(budget, user)
+        budget = Repo.preload(budget, :users)
+        {:ok, budget}
+      {:error, bad_changeset} ->
+        {:error, bad_changeset}
+    end
+  end
+
   @doc """
   Updates a budget.
 

@@ -137,6 +137,18 @@ defmodule OpenBudget.BudgetsTest do
       assert {:error, %Ecto.Changeset{}} = Budgets.create_budget(@invalid_attrs)
     end
 
+    test "create_budget/2 with valid data creates a budget" do
+      user = user_fixture()
+      assert {:ok, %Budget{} = budget} = Budgets.create_budget(@valid_attrs, user)
+      assert budget.name == "Sample Budget"
+      assert budget.description == "This is a sample budget"
+    end
+
+    test "create_budget/2 with invalid data returns error changeset" do
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Budgets.create_budget(@invalid_attrs, user)
+    end
+
     test "update_budget/2 with valid data updates the budget" do
       budget = budget_fixture()
       assert {:ok, budget} = Budgets.update_budget(budget, @update_attrs)
