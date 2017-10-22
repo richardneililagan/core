@@ -110,6 +110,21 @@ defmodule OpenBudget.BudgetsTest do
       assert Budgets.get_budget!(budget.id) == budget
     end
 
+    test "get_budget!/2 returns the budget with given id and associated user" do
+      user = user_fixture()
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      assert Budgets.get_budget!(budget.id, user) == budget
+    end
+
+    test "get_budget!/2 with invalid budget and user association returns nothing" do
+      user = user_fixture()
+      budget = budget_fixture()
+      assert_raise Ecto.NoResultsError, fn ->
+        Budgets.get_budget!(budget.id, user)
+      end
+    end
+
     test "create_budget/1 with valid data creates a budget" do
       assert {:ok, %Budget{} = budget} = Budgets.create_budget(@valid_attrs)
       assert budget.name == "Sample Budget"

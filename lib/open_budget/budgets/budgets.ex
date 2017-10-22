@@ -152,6 +152,27 @@ defmodule OpenBudget.Budgets do
   def get_budget!(id), do: Repo.get!(Budget, id)
 
   @doc """
+  Gets a single budget that's associated with the given user.
+
+  Raises `Ecto.NoResultsError` if the Budget does not exist.
+
+  ## Examples
+
+      iex> get_budget!(123, user)
+      %Budget{}
+
+      iex> get_budget!(456, user)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_budget!(id, user) do
+    Repo.one!(from b in Budget,
+             left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+             left_join: u in User, on: u.id == bu.user_id,
+             where: u.id == ^user.id and b.id == ^id)
+  end
+
+  @doc """
   Creates a budget.
 
   ## Examples
