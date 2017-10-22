@@ -138,18 +138,21 @@ defmodule OpenBudget.Budgets do
   @doc """
   Gets a single budget.
 
-  Raises `Ecto.NoResultsError` if the Budget does not exist.
-
   ## Examples
 
-      iex> get_budget!(123)
-      %Budget{}
+      iex> get_budget(123)
+      {:ok, %Budget{}}
 
-      iex> get_budget!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_budget(456)
+      {:error, "Budget not found"}
 
   """
-  def get_budget!(id), do: Repo.get!(Budget, id)
+  def get_budget(id) do
+    budget = Repo.get!(Budget, id)
+    {:ok, budget}
+  rescue
+    Ecto.NoResultsError -> {:error, "Budget not found"}
+  end
 
   @doc """
   Gets a single budget that's associated with the given user.
@@ -158,18 +161,21 @@ defmodule OpenBudget.Budgets do
 
   ## Examples
 
-      iex> get_budget!(123, user)
-      %Budget{}
+      iex> get_budget(123, user)
+      {:ok, %Budget{}}
 
-      iex> get_budget!(456, user)
-      ** (Ecto.NoResultsError)
+      iex> get_budget(456, user)
+      {:error, "Budget not found"}
 
   """
-  def get_budget!(id, user) do
-    Repo.one!(from b in Budget,
-             left_join: bu in BudgetUser, on: b.id == bu.budget_id,
-             left_join: u in User, on: u.id == bu.user_id,
-             where: u.id == ^user.id and b.id == ^id)
+  def get_budget(id, user) do
+    budget = Repo.one!(from b in Budget,
+                      left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+                      left_join: u in User, on: u.id == bu.user_id,
+                      where: u.id == ^user.id and b.id == ^id)
+    {:ok, budget}
+  rescue
+    Ecto.NoResultsError -> {:error, "Budget not found"}
   end
 
   @doc """

@@ -105,24 +105,26 @@ defmodule OpenBudget.BudgetsTest do
       assert Budgets.list_budgets(user) == [budget]
     end
 
-    test "get_budget!/1 returns the budget with given id" do
+    test "get_budget/1 returns the budget with given id" do
       budget = budget_fixture()
-      assert Budgets.get_budget!(budget.id) == budget
+      assert Budgets.get_budget(budget.id) == {:ok, budget}
     end
 
-    test "get_budget!/2 returns the budget with given id and associated user" do
+    test "get_budget/1 with invalid budget returns nothing" do
+      assert Budgets.get_budget(123) == {:error, "Budget not found"}
+    end
+
+    test "get_budget/2 returns the budget with given id and associated user" do
       user = user_fixture()
       budget = budget_fixture()
       Budgets.associate_user_to_budget(budget, user)
-      assert Budgets.get_budget!(budget.id, user) == budget
+      assert Budgets.get_budget(budget.id, user) == {:ok, budget}
     end
 
-    test "get_budget!/2 with invalid budget and user association returns nothing" do
+    test "get_budget/2 with invalid budget and user association returns nothing" do
       user = user_fixture()
       budget = budget_fixture()
-      assert_raise Ecto.NoResultsError, fn ->
-        Budgets.get_budget!(budget.id, user)
-      end
+      assert Budgets.get_budget(budget.id, user) == {:error, "Budget not found"}
     end
 
     test "create_budget/1 with valid data creates a budget" do
@@ -146,13 +148,13 @@ defmodule OpenBudget.BudgetsTest do
     test "update_budget/2 with invalid data returns error changeset" do
       budget = budget_fixture()
       assert {:error, %Ecto.Changeset{}} = Budgets.update_budget(budget, @invalid_attrs)
-      assert budget == Budgets.get_budget!(budget.id)
+      assert {:ok, budget} == Budgets.get_budget(budget.id)
     end
 
     test "delete_budget/1 deletes the budget" do
       budget = budget_fixture()
       assert {:ok, %Budget{}} = Budgets.delete_budget(budget)
-      assert_raise Ecto.NoResultsError, fn -> Budgets.get_budget!(budget.id) end
+      assert Budgets.get_budget(budget.id) == {:error, "Budget not found"}
     end
 
     test "change_budget/1 returns a budget changeset" do
