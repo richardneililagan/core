@@ -3,7 +3,6 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
 
   alias OpenBudget.Repo
   alias OpenBudget.Budgets
-  alias OpenBudget.Budgets.Budget
   alias OpenBudget.Authentication
   alias OpenBudget.Authentication.User
   alias OpenBudgetWeb.Authentication, as: WebAuth
@@ -115,7 +114,10 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       params = %{data: %{attributes: @invalid_attrs}}
       conn = post conn, budget_path(conn, :create), params
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 422)["errors"] == [%{
+        "title" => "Unprocessable entity",
+        "code" => 422
+      }]
     end
   end
 

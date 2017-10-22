@@ -196,6 +196,18 @@ defmodule OpenBudget.Budgets do
     |> Repo.insert()
   end
 
+  @doc """
+  Creates a budget and associate it with the given user.
+
+  ## Examples
+
+      iex> create_budget(%{field: value}, user)
+      {:ok, %Budget{}}
+
+      iex> create_budget(%{field: bad_value}, user)
+      {:error, %Ecto.Changeset{}}
+
+  """
   def create_budget(attrs, user) do
     changeset =
       %Budget{}
