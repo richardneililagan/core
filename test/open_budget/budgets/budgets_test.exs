@@ -98,9 +98,33 @@ defmodule OpenBudget.BudgetsTest do
       assert Budgets.list_budgets() == [budget]
     end
 
-    test "get_budget!/1 returns the budget with given id" do
+    test "list_budgets/1 returns all budgets associated with the user" do
+      user = user_fixture()
       budget = budget_fixture()
-      assert Budgets.get_budget!(budget.id) == budget
+      Budgets.associate_user_to_budget(budget, user)
+      assert Budgets.list_budgets(user) == [budget]
+    end
+
+    test "get_budget/1 returns the budget with given id" do
+      budget = budget_fixture()
+      assert Budgets.get_budget(budget.id) == {:ok, budget}
+    end
+
+    test "get_budget/1 with invalid budget returns nothing" do
+      assert Budgets.get_budget(123) == {:error, "Budget not found"}
+    end
+
+    test "get_budget/2 returns the budget with given id and associated user" do
+      user = user_fixture()
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      assert Budgets.get_budget(budget.id, user) == {:ok, budget}
+    end
+
+    test "get_budget/2 with invalid budget and user association returns nothing" do
+      user = user_fixture()
+      budget = budget_fixture()
+      assert Budgets.get_budget(budget.id, user) == {:error, "Budget not found"}
     end
 
     test "create_budget/1 with valid data creates a budget" do
@@ -111,6 +135,18 @@ defmodule OpenBudget.BudgetsTest do
 
     test "create_budget/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Budgets.create_budget(@invalid_attrs)
+    end
+
+    test "create_budget/2 with valid data creates a budget" do
+      user = user_fixture()
+      assert {:ok, %Budget{} = budget} = Budgets.create_budget(@valid_attrs, user)
+      assert budget.name == "Sample Budget"
+      assert budget.description == "This is a sample budget"
+    end
+
+    test "create_budget/2 with invalid data returns error changeset" do
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Budgets.create_budget(@invalid_attrs, user)
     end
 
     test "update_budget/2 with valid data updates the budget" do
@@ -124,13 +160,13 @@ defmodule OpenBudget.BudgetsTest do
     test "update_budget/2 with invalid data returns error changeset" do
       budget = budget_fixture()
       assert {:error, %Ecto.Changeset{}} = Budgets.update_budget(budget, @invalid_attrs)
-      assert budget == Budgets.get_budget!(budget.id)
+      assert {:ok, budget} == Budgets.get_budget(budget.id)
     end
 
     test "delete_budget/1 deletes the budget" do
       budget = budget_fixture()
       assert {:ok, %Budget{}} = Budgets.delete_budget(budget)
-      assert_raise Ecto.NoResultsError, fn -> Budgets.get_budget!(budget.id) end
+      assert Budgets.get_budget(budget.id) == {:error, "Budget not found"}
     end
 
     test "change_budget/1 returns a budget changeset" do

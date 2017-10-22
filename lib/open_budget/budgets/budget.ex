@@ -11,7 +11,10 @@ defmodule OpenBudget.Budgets.Budget do
   schema "budgets" do
     field :description, :string
     field :name, :string
-    many_to_many :users, User, join_through: BudgetUser, unique: true
+    many_to_many :users, User,
+                       join_through: BudgetUser,
+                       unique: true,
+                       on_delete: :delete_all
 
     timestamps()
   end

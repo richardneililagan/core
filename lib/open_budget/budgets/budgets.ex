@@ -120,20 +120,63 @@ defmodule OpenBudget.Budgets do
   end
 
   @doc """
+  Returns the list of budgets associated with the user specified.
+
+  ## Examples
+
+      iex> list_budgets(user)
+      [%Budget{}, ...]
+
+  """
+  def list_budgets(user) do
+    Repo.all(from b in Budget,
+            left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+            left_join: u in User, on: u.id == bu.user_id,
+            where: u.id == ^user.id)
+  end
+
+  @doc """
   Gets a single budget.
+
+  ## Examples
+
+      iex> get_budget(123)
+      {:ok, %Budget{}}
+
+      iex> get_budget(456)
+      {:error, "Budget not found"}
+
+  """
+  def get_budget(id) do
+    budget = Repo.get!(Budget, id)
+    {:ok, budget}
+  rescue
+    Ecto.NoResultsError -> {:error, "Budget not found"}
+  end
+
+  @doc """
+  Gets a single budget that's associated with the given user.
 
   Raises `Ecto.NoResultsError` if the Budget does not exist.
 
   ## Examples
 
-      iex> get_budget!(123)
-      %Budget{}
+      iex> get_budget(123, user)
+      {:ok, %Budget{}}
 
-      iex> get_budget!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_budget(456, user)
+      {:error, "Budget not found"}
 
   """
-  def get_budget!(id), do: Repo.get!(Budget, id)
+  def get_budget(id, user) do
+    budget = Repo.one!(from b in Budget,
+                      left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+                      left_join: u in User, on: u.id == bu.user_id,
+                      where: u.id == ^user.id and b.id == ^id)
+    {:ok, budget}
+  rescue
+    Ecto.NoResultsError -> {:error, "Budget not found"}
+  end
 
   @doc """
   Creates a budget.
@@ -151,6 +194,34 @@ defmodule OpenBudget.Budgets do
     %Budget{}
     |> Budget.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates a budget and associate it with the given user.
+
+  ## Examples
+
+      iex> create_budget(%{field: value}, user)
+      {:ok, %Budget{}}
+
+      iex> create_budget(%{field: bad_value}, user)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_budget(attrs, user) do
+    changeset =
+      %Budget{}
+      |> Budget.changeset(attrs)
+      |> Repo.insert()
+
+    case changeset do
+      {:ok, budget} ->
+        associate_user_to_budget(budget, user)
+        budget = Repo.preload(budget, :users)
+        {:ok, budget}
+      {:error, bad_changeset} ->
+        {:error, bad_changeset}
+    end
   end
 
   @doc """
