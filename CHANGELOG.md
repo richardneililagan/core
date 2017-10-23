@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - This changelog.
 - Use GPL 3.0 as the license for this project.
+- Add Code of Conduct.
+- Add Contributing Guidelines.
 - Add Budget resource (schema/endpoint).
 
 ### Changed
