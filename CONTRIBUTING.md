@@ -4,6 +4,54 @@ We love pull requests from everyone. Reading this document means you're consider
 
 By participating in this project, you agree to abide by [our code of conduct](CODE_OF_CONDUCT.md).
 
+## Getting Started
+
+First of all, make sure that you have Elixir and PostgreSQL installed on your machine.
+
+* [How to install Elixir](https://elixir-lang.org/install.html)
+* [How to install PostgreSQL](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
+
+Afterwards, fork this project, then clone your repo:
+
+```
+git clone git@github.com:your-username/core.git
+```
+
+Get the dependencies needed for this project:
+
+```
+mix deps.get
+```
+
+Setup your database for local development:
+
+```
+mix ecto.create # Create the database
+mix ecto.migrate # Perform the database migrations needed by the project
+```
+
+Finally, start Phoenix's local server so you can run your app in development:
+
+```
+mix phx.server
+```
+
+Since this project is just an API backend for [OpenBudget UI](https://github.com/obudget/ui), simply firing up a browser won't work if you want to interact with the API manually.
+
+In order to interact with the API, you will need to use a REST client. Here are some suggestions:
+
+* [Postman](https://www.getpostman.com/)
+* [Advance REST Client](https://advancedrestclient.com/)
+* [Insomnia](https://insomnia.rest/)
+
+The API is located (by default) at http://localhost:4000/api
+
+You can get a list of available API endpoints by executing this in your terminal:
+
+```
+mix phx.routes
+```
+
 ## Coding Standards
 
 When contributing, please follow the coding standards mentioned below so we can have nice and consistent-looking code that's easy to read for everyone.
