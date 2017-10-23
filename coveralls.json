@@ -1,6 +1,10 @@
 {
   "skip_files": [
     "test",
-    "lib/open_budget/guardian.ex"
+    "lib/open_budget_web.ex",
+    "lib/open_budget_web/endpoint.ex",
+    "lib/open_budget_web/controllers/fallback_controller.ex",
+    "lib/open_budget_web/views/error_helpers.ex",
+    "lib/open_budget/application.ex"
   ]
 }
