@@ -2,6 +2,9 @@ defmodule OpenBudgetWeb.TokenControllerTest do
   use OpenBudgetWeb.ConnCase
 
   alias OpenBudget.Authentication, as: AuthContext
+  alias OpenBudget.Repo
+  alias OpenBudget.Authentication.User
+  alias OpenBudget.Guardian.Authentication, as: GuardianAuth
 
   @valid_attrs %{email: "test@example.com", password: "secretpassword"}
   @invalid_attrs %{email: "test@example.com", password: "wrongpassword"}
@@ -48,6 +51,20 @@ defmodule OpenBudgetWeb.TokenControllerTest do
       response = hd(response)
       assert response["status"] == 404
       assert response["title"] == "Resource not found"
+    end
+  end
+
+  describe "delete" do
+    test "renders nothing when a user signs out", %{conn: conn} do
+      user = Repo.get_by(User, email: "test@example.com")
+      conn = GuardianAuth.sign_in(conn, user)
+      conn = delete conn, token_path(conn, :delete)
+      assert conn.status == 204
+    end
+
+    test "renders error when sign out is accessed by unauthenticated user", %{conn: conn} do
+      conn = delete conn, token_path(conn, :delete)
+      assert conn.status == 401
     end
   end
 end

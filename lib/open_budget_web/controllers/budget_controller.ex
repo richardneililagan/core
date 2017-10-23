@@ -67,10 +67,6 @@ defmodule OpenBudgetWeb.BudgetController do
       {:ok, budget} ->
         case Budgets.delete_budget(budget) do
           {:ok, _} -> send_resp(conn, :no_content, "")
-          {:error, _} ->
-            conn
-            |> put_status(422)
-            |> render(OpenBudgetWeb.ErrorView, "422.json-api")
         end
       {:error, _} ->
         conn

@@ -25,12 +25,12 @@ defmodule OpenBudgetWeb.Router do
 
     resources "/budgets", BudgetController, except: [:new, :edit]
     resources "/users", UserController, except: [:new, :edit, :create]
+    delete "/token", TokenController, :delete
   end
 
   scope "/api/auth", OpenBudgetWeb do
     pipe_through :api
 
     resources "/token", TokenController, only: [:create]
-    delete "/token", TokenController, :delete
   end
 end
