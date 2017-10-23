@@ -2,6 +2,8 @@
 
 We love pull requests from everyone. Reading this document means you're considering to take time out of your busy schedule to contribute to this project and that is most appreciated.
 
+By participating in this project, you agree to abide by [our code of conduct](CODE_OF_CONDUCT.md).
+
 ## Coding Standards
 
 When contributing, please follow the coding standards mentioned below so we can have nice and consistent-looking code that's easy to read for everyone.
