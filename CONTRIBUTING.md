@@ -94,3 +94,39 @@ Aside from that, your tests also need to cover all of the code that you've writt
 
 * Add as many comments and documentation as you need for the code that you're going to write. OpenBudget should be accessible for developers of all experience and skill levels. Better to have too many than none at all.
 * Don't be shy about adding line breaks between your code. A couple of empty lines between blocks of code can really improve readability.
+
+## New to Elixir or Web Development?
+
+Elixir is a language that was made in 2011. It has only been gaining traction recently, so it's understandable that a lot of developers, from beginners to senior-level, are not familiar with the language.
+
+With that said, the aim of this project is to be approachable enough for anyone (even beginners) to be able to contribute to. In most cases, you should be capable enough to contribute to this project after getting a grasp of the basics of Elixir and Phoenix.
+
+Here are some resources to help you get started on your journey to the world of Elixir.
+
+## Elixir
+
+* [Official introduction guide from Elixir's Website](https://elixir-lang.org/getting-started/introduction.html)
+* [Learn Elixir by Do What You Love](https://github.com/dwyl/learn-elixir)
+* [Learn Elixir in Y Minutes](https://learnxinyminutes.com/docs/elixir)
+* [Programming Elixir 1.3 book by Dave Thomas](https://pragprog.com/book/elixir13/programming-elixir-1-3)
+* [Elixir in Action book by Saša Jurić](https://www.manning.com/books/elixir-in-action)
+* [Introducing Elixir book by Simon St. Laurent and J. Eisenberg](http://shop.oreilly.com/product/0636920030584.do)
+
+## Phoenix
+
+* [Official introduction guide from Phoenix's Website](https://hexdocs.pm/phoenix/up_and_running.html)
+* [Learn Phoenix Framework by Do What You Love](https://github.com/dwyl/learn-phoenix-framework)
+* [Programming Phoenix book by Chris McCord, Bruce Tate, and José Valim](https://pragprog.com/book/phoenix/programming-phoenix)
+
+## Functional Programming
+
+* [Wikipedia entry on Functional Programming](https://en.wikipedia.org/wiki/Functional_programming)
+* [Functional Programming & Elixir by Steven Vandevelde](https://medium.com/making-internets/functional-programming-elixir-pt-1-the-basics-bd3ce8d68f1b)
+* [So You Want to be a Functional Programmer by Charles Scalfani](https://medium.com/@cscalfani/so-you-want-to-be-a-functional-programmer-part-1-1f15e387e536)
+* [A practical introduction to functional programming by Mary Rose Cook](https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming)
+* [Learn Functional Programming with Elixir book by Ulisses Almeida](https://pragprog.com/book/cdc-elixir/learn-functional-programming-with-elixir)
+
+## Web Development
+
+* [Wikipedia entry on REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
+* [JSON API Standard](http://jsonapi.org/)
