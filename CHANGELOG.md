@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Change all Budget endpoints to only show budgets associated with the current logged-in user.
 - Improve all error responses to adhere to JSON API.
 
+### Fixed
+
+- Fix clients being able to access `DELETE /token` without being authenticated.
+
 ## 0.1.0 - 2017-10-08
 
 ### Added
