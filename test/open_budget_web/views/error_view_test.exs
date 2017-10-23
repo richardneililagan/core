@@ -41,12 +41,21 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   end
 
   test "renders 422.json-api" do
-    assert render(OpenBudgetWeb.ErrorView, "422.json-api", []) ==
+    changeset = Ecto.Changeset.add_error(
+      %Ecto.Changeset{},
+      :monies,
+      "must be more than %{count}",
+      [count: 10]
+    )
+    assert render(OpenBudgetWeb.ErrorView, "422.json-api", changeset: changeset) ==
            %{
              "errors" => [%{
                status: 422,
-               title: "Unprocessable entity",
-               detail: "There is an error with processing this resource"
+               title: "must be more than 10",
+               detail: "Monies must be more than 10",
+               source: %{
+                 pointer: "/data/attributes/monies"
+               }
               }],
              "jsonapi" => %{"version" => "1.0"}
             }

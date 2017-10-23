@@ -115,11 +115,24 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       params = %{data: %{attributes: @invalid_attrs}}
       conn = post conn, budget_path(conn, :create), params
-      assert json_response(conn, 422)["errors"] == [%{
-        "title" => "Unprocessable entity",
-        "status" => 422,
-        "detail" => "There is an error with processing this resource"
-      }]
+      assert json_response(conn, 422)["errors"] == [
+        %{
+          "title" => "can't be blank",
+          "status" => 422,
+          "detail" => "Name can't be blank",
+          "source" => %{
+            "pointer" => "/data/attributes/name"
+          }
+        },
+        %{
+          "title" => "can't be blank",
+          "status" => 422,
+          "detail" => "Description can't be blank",
+          "source" => %{
+            "pointer" => "/data/attributes/description"
+          }
+        }
+      ]
     end
   end
 
@@ -146,11 +159,24 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       Budgets.associate_user_to_budget(budget, user)
       params = %{data: %{attributes: @invalid_attrs}}
       conn = put conn, budget_path(conn, :update, budget), params
-      assert json_response(conn, 422)["errors"] == [%{
-        "title" => "Unprocessable entity",
-        "status" => 422,
-        "detail" => "There is an error with processing this resource"
-      }]
+      assert json_response(conn, 422)["errors"] == [
+        %{
+          "title" => "can't be blank",
+          "status" => 422,
+          "detail" => "Name can't be blank",
+          "source" => %{
+            "pointer" => "/data/attributes/name"
+          }
+        },
+        %{
+          "title" => "can't be blank",
+          "status" => 422,
+          "detail" => "Description can't be blank",
+          "source" => %{
+            "pointer" => "/data/attributes/description"
+          }
+        }
+      ]
     end
 
     test "renders error when budget is not associated with current user", %{conn: conn, budget: budget} do
