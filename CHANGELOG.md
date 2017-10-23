@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Require user authentication for Budget endpoints.
 - Include location (`links` key) inside API response body instead of header.
 - Change all Budget endpoints to only show budgets associated with the current logged-in user.
+- Improve all error responses to adhere to JSON API.
 
 ## 0.1.0 - 2017-10-08
 
