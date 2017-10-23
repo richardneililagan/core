@@ -103,7 +103,7 @@ With that said, the aim of this project is to be approachable enough for anyone 
 
 Here are some resources to help you get started on your journey to the world of Elixir.
 
-## Elixir
+### Elixir
 
 * [Official introduction guide from Elixir's Website](https://elixir-lang.org/getting-started/introduction.html)
 * [Learn Elixir by Do What You Love](https://github.com/dwyl/learn-elixir)
@@ -112,13 +112,13 @@ Here are some resources to help you get started on your journey to the world of 
 * [Elixir in Action book by Saša Jurić](https://www.manning.com/books/elixir-in-action)
 * [Introducing Elixir book by Simon St. Laurent and J. Eisenberg](http://shop.oreilly.com/product/0636920030584.do)
 
-## Phoenix
+### Phoenix
 
 * [Official introduction guide from Phoenix's Website](https://hexdocs.pm/phoenix/up_and_running.html)
 * [Learn Phoenix Framework by Do What You Love](https://github.com/dwyl/learn-phoenix-framework)
 * [Programming Phoenix book by Chris McCord, Bruce Tate, and José Valim](https://pragprog.com/book/phoenix/programming-phoenix)
 
-## Functional Programming
+### Functional Programming
 
 * [Wikipedia entry on Functional Programming](https://en.wikipedia.org/wiki/Functional_programming)
 * [Functional Programming & Elixir by Steven Vandevelde](https://medium.com/making-internets/functional-programming-elixir-pt-1-the-basics-bd3ce8d68f1b)
@@ -126,7 +126,7 @@ Here are some resources to help you get started on your journey to the world of 
 * [A practical introduction to functional programming by Mary Rose Cook](https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming)
 * [Learn Functional Programming with Elixir book by Ulisses Almeida](https://pragprog.com/book/cdc-elixir/learn-functional-programming-with-elixir)
 
-## Web Development
+### Web Development
 
 * [Wikipedia entry on REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
 * [JSON API Standard](http://jsonapi.org/)
