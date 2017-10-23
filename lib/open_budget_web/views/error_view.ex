@@ -3,29 +3,29 @@ defmodule OpenBudgetWeb.ErrorView do
   use JaSerializer.PhoenixView
 
   alias JaSerializer.ErrorSerializer
+  alias JaSerializer.EctoErrorSerializer
 
   def render("401.json-api", _assigns) do
-    %{title: "Unauthorized", code: 401}
+    %{title: "Unauthorized", status: 401, detail: "You are not authorized to access this resource"}
     |> ErrorSerializer.format
   end
 
   def render("403.json-api", _assigns) do
-    %{title: "Forbidden", code: 403}
+    %{title: "Forbidden", status: 403, detail: "Accessing this resource is forbidden"}
     |> ErrorSerializer.format
   end
 
   def render("404.json-api", _assigns) do
-    %{title: "Resource not found", code: 404}
+    %{title: "Resource not found", status: 404, detail: "This resource cannot be found"}
     |> ErrorSerializer.format
   end
 
-  def render("422.json-api", _assigns) do
-    %{title: "Unprocessable entity", code: 422}
-    |> ErrorSerializer.format
+  def render("422.json-api", assigns) do
+    EctoErrorSerializer.format(assigns.changeset, [opts: [status: 422]])
   end
 
   def render("500.json-api", _assigns) do
-    %{title: "Internal server error", code: 500}
+    %{title: "Internal server error", status: 500, detail: "An unexpected error happened on the server"}
     |> ErrorSerializer.format
   end
 

@@ -22,10 +22,10 @@ defmodule OpenBudgetWeb.BudgetController do
         conn
         |> put_status(201)
         |> render("show.json-api", data: budget, opts: [include: "users"])
-      {:error, _} ->
+      {:error, changeset} ->
         conn
         |> put_status(422)
-        |> render(OpenBudgetWeb.ErrorView, "422.json-api")
+        |> render(OpenBudgetWeb.ErrorView, "422.json-api", changeset: changeset)
     end
   end
 
@@ -49,10 +49,10 @@ defmodule OpenBudgetWeb.BudgetController do
 
         case Budgets.update_budget(budget, attrs) do
           {:ok, budget} -> render(conn, "show.json-api", data: budget, opts: [include: "users"])
-          {:error, _} ->
+          {:error, changeset} ->
             conn
             |> put_status(422)
-            |> render(OpenBudgetWeb.ErrorView, "422.json-api")
+            |> render(OpenBudgetWeb.ErrorView, "422.json-api", changeset: changeset)
         end
       {:error, _} ->
         conn

@@ -7,7 +7,11 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   test "renders 401.json-api" do
     assert render(OpenBudgetWeb.ErrorView, "401.json-api", []) ==
            %{
-             "errors" => [%{code: 401, title: "Unauthorized"}],
+             "errors" => [%{
+               status: 401,
+               title: "Unauthorized",
+               detail: "You are not authorized to access this resource"
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end
@@ -15,7 +19,11 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   test "renders 403.json-api" do
     assert render(OpenBudgetWeb.ErrorView, "403.json-api", []) ==
            %{
-             "errors" => [%{code: 403, title: "Forbidden"}],
+             "errors" => [%{
+               status: 403,
+               title: "Forbidden",
+               detail: "Accessing this resource is forbidden"
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end
@@ -23,15 +31,32 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   test "renders 404.json-api" do
     assert render(OpenBudgetWeb.ErrorView, "404.json-api", []) ==
            %{
-             "errors" => [%{code: 404, title: "Resource not found"}],
+             "errors" => [%{
+               status: 404,
+               title: "Resource not found",
+               detail: "This resource cannot be found"
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end
 
   test "renders 422.json-api" do
-    assert render(OpenBudgetWeb.ErrorView, "422.json-api", []) ==
+    changeset = Ecto.Changeset.add_error(
+      %Ecto.Changeset{},
+      :monies,
+      "must be more than %{count}",
+      [count: 10]
+    )
+    assert render(OpenBudgetWeb.ErrorView, "422.json-api", changeset: changeset) ==
            %{
-             "errors" => [%{code: 422, title: "Unprocessable entity"}],
+             "errors" => [%{
+               status: 422,
+               title: "must be more than 10",
+               detail: "Monies must be more than 10",
+               source: %{
+                 pointer: "/data/attributes/monies"
+               }
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end
@@ -39,7 +64,11 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   test "render 500.json-api" do
     assert render(OpenBudgetWeb.ErrorView, "500.json-api", []) ==
            %{
-             "errors" => [%{code: 500, title: "Internal server error"}],
+             "errors" => [%{
+               status: 500,
+               title: "Internal server error",
+               detail: "An unexpected error happened on the server"
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end
@@ -47,7 +76,11 @@ defmodule OpenBudgetWeb.ErrorViewTest do
   test "render any other" do
     assert render(OpenBudgetWeb.ErrorView, "505.json", []) ==
            %{
-             "errors" => [%{code: 500, title: "Internal server error"}],
+             "errors" => [%{
+               status: 500,
+               title: "Internal server error",
+               detail: "An unexpected error happened on the server"
+              }],
              "jsonapi" => %{"version" => "1.0"}
             }
   end

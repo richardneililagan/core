@@ -37,7 +37,7 @@ defmodule OpenBudgetWeb.TokenControllerTest do
       conn = post conn, token_path(conn, :create), params
       response = json_response(conn, 401)["errors"]
       response = hd(response)
-      assert response["code"] == 401
+      assert response["status"] == 401
       assert response["title"] == "Unauthorized"
     end
 
@@ -46,7 +46,7 @@ defmodule OpenBudgetWeb.TokenControllerTest do
       conn = post conn, token_path(conn, :create), params
       response = json_response(conn, 404)["errors"]
       response = hd(response)
-      assert response["code"] == 404
+      assert response["status"] == 404
       assert response["title"] == "Resource not found"
     end
   end
