@@ -93,7 +93,8 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       assert conn.status == 404
       assert json_response(conn, 404)["errors"] == [%{
         "title" => "Resource not found",
-        "code" => 404
+        "status" => 404,
+        "detail" => "This resource cannot be found"
       }]
     end
   end
@@ -116,7 +117,8 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       conn = post conn, budget_path(conn, :create), params
       assert json_response(conn, 422)["errors"] == [%{
         "title" => "Unprocessable entity",
-        "code" => 422
+        "status" => 422,
+        "detail" => "There is an error with processing this resource"
       }]
     end
   end
@@ -146,7 +148,8 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       conn = put conn, budget_path(conn, :update, budget), params
       assert json_response(conn, 422)["errors"] == [%{
         "title" => "Unprocessable entity",
-        "code" => 422
+        "status" => 422,
+        "detail" => "There is an error with processing this resource"
       }]
     end
 
@@ -155,7 +158,8 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       conn = put conn, budget_path(conn, :update, budget), params
       assert json_response(conn, 404)["errors"] == [%{
         "title" => "Resource not found",
-        "code" => 404
+        "status" => 404,
+        "detail" => "This resource cannot be found"
       }]
     end
   end
@@ -174,7 +178,8 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
       conn = delete conn, budget_path(conn, :delete, budget)
       assert json_response(conn, 404)["errors"] == [%{
         "title" => "Resource not found",
-        "code" => 404
+        "status" => 404,
+        "detail" => "This resource cannot be found"
       }]
     end
   end
