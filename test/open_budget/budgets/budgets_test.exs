@@ -193,5 +193,33 @@ defmodule OpenBudget.BudgetsTest do
       assert Kernel.length(result) == 2
       assert user_result.email == "existing@example.com"
     end
+
+    test "switch_active_budget/2 switches the active budget when the budget is associated with the given user" do
+      budget = budget_fixture()
+      other_budget = budget_fixture(%{name: "Other Budget"})
+      user = user_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      Budgets.associate_user_to_budget(other_budget, user)
+
+      {:ok, budget, user} = Budgets.switch_active_budget(budget, user)
+      assert user.active_budget_id == budget.id
+
+      {:ok, other_budget, user} = Budgets.switch_active_budget(other_budget, user)
+      assert user.active_budget_id == other_budget.id
+    end
+
+    test "switch_active_budget/2 returns an error when the budget is not associated with the given user" do
+      budget = budget_fixture()
+      other_budget = budget_fixture(%{name: "Other Budget"})
+      user = user_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+
+      {:ok, budget, user} = Budgets.switch_active_budget(budget, user)
+      assert user.active_budget_id == budget.id
+
+      assert Budgets.switch_active_budget(other_budget, user) == {:error, "Budget not found"}
+      assert user.active_budget_id != other_budget.id
+      assert user.active_budget_id == budget.id
+    end
   end
 end

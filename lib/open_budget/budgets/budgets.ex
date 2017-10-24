@@ -288,4 +288,28 @@ defmodule OpenBudget.Budgets do
             left_join: b in Budget, on: b.id == bu.budget_id,
             where: b.id == ^budget.id)
   end
+
+  def switch_active_budget(%Budget{} = budget, %User{} = user) do
+    budget = Repo.one(from b in Budget,
+                      left_join: bu in BudgetUser, on: b.id == bu.budget_id,
+                      left_join: u in User, on: u.id == bu.user_id,
+                      where: b.id == ^budget.id and u.id == ^user.id)
+
+    case budget do
+      nil -> {:error, "Budget not found"}
+      _ ->
+        changeset =
+          user
+          |> User.active_budget_changeset(%{active_budget_id: budget.id})
+          |> Repo.update()
+
+        case changeset do
+          {:ok, user} ->
+            user = Repo.preload(user, :active_budget)
+            {:ok, budget, user}
+          {:error, _} ->
+            {:error, "Failed to switch active budget"}
+        end
+    end
+  end
 end
