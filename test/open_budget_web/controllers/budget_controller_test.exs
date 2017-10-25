@@ -210,6 +210,53 @@ defmodule OpenBudgetWeb.BudgetControllerTest do
     end
   end
 
+  describe "switch" do
+    test "switches to given budget associated with the current user", %{conn: conn} do
+      user = Repo.get_by(User, %{email: "test@example.com"})
+      budget = budget_fixture()
+      other_budget = budget_fixture(%{name: "Other budget"})
+      Budgets.associate_user_to_budget(budget, user)
+      Budgets.associate_user_to_budget(other_budget, user)
+      Budgets.switch_active_budget(budget, user)
+      conn = post conn, budget_switch_path(conn, :switch, other_budget.id)
+
+      assert json_response(conn, 200)["data"] == %{
+        "type" => "budget",
+        "id" => "#{other_budget.id}",
+        "attributes" => %{
+          "name" => "Other budget",
+          "description" => "This is a sample budget"
+        },
+        "links" => %{
+          "self" => "/budgets/#{other_budget.id}"
+        },
+        "relationships" => %{
+          "users" => %{
+            "links" => %{
+              "related" => "/budgets/#{other_budget.id}/users"
+            }
+          }
+        }
+      }
+    end
+
+    test "render error when queried budget is not associated with user", %{conn: conn} do
+      user = Repo.get_by(User, %{email: "test@example.com"})
+      budget = budget_fixture()
+      Budgets.associate_user_to_budget(budget, user)
+      Budgets.switch_active_budget(budget, user)
+      other_budget = budget_fixture(%{name: "Other budget"})
+      conn = post conn, budget_switch_path(conn, :switch, other_budget.id)
+
+      assert conn.status == 404
+      assert json_response(conn, 404)["errors"] == [%{
+        "title" => "Resource not found",
+        "status" => 404,
+        "detail" => "This resource cannot be found"
+      }]
+    end
+  end
+
   defp create_budget(_) do
     budget = budget_fixture()
     {:ok, budget: budget}

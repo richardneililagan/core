@@ -11,6 +11,7 @@ defmodule OpenBudget.Authentication.User do
   import Ecto.Changeset
   alias OpenBudget.Authentication.User
   alias OpenBudget.Budgets.BudgetUser
+  alias OpenBudget.Budgets.Budget
   alias Comeonin.Argon2
 
   schema "users" do
@@ -19,6 +20,7 @@ defmodule OpenBudget.Authentication.User do
     field :password_hash, :string
     many_to_many :budgets, OpenBudget.Budgets.Budget,
                 join_through: BudgetUser, unique: true
+    belongs_to :active_budget, Budget
 
     timestamps()
   end
@@ -37,6 +39,10 @@ defmodule OpenBudget.Authentication.User do
     |> cast(attrs, ~w(password), [])
     |> validate_length(:password, min: 6, max: 30)
     |> put_password_hash()
+  end
+
+  def active_budget_changeset(%User{} = user, attrs) do
+    user |> cast(attrs, [:active_budget_id])
   end
 
   defp put_password_hash(changeset) do

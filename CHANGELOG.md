@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add Code of Conduct.
 - Add Contributing Guidelines.
 - Add Budget resource (schema/endpoint).
+- Add active budgets and allow users to switch between budgets.
 
 ### Changed
 
