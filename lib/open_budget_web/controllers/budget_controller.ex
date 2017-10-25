@@ -74,4 +74,17 @@ defmodule OpenBudgetWeb.BudgetController do
         |> render(OpenBudgetWeb.ErrorView, "404.json-api")
     end
   end
+
+  def switch(conn, %{"budget_id" => id}) do
+    current_user = Plug.current_resource(conn)
+    case Budgets.get_budget(id, current_user) do
+      {:ok, budget} ->
+        {:ok, budget, _} = Budgets.switch_active_budget(budget, current_user)
+        render(conn, "show.json-api", data: budget)
+      {:error, _} ->
+        conn
+        |> put_status(404)
+        |> render(OpenBudgetWeb.ErrorView, "404.json-api")
+    end
+  end
 end

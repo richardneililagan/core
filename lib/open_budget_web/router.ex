@@ -23,7 +23,9 @@ defmodule OpenBudgetWeb.Router do
   scope "/api", OpenBudgetWeb do
     pipe_through :api_auth
 
-    resources "/budgets", BudgetController, except: [:new, :edit]
+    resources "/budgets", BudgetController, except: [:new, :edit] do
+      post "/switch", BudgetController, :switch, as: :switch
+    end
     resources "/users", UserController, except: [:new, :edit, :create]
     delete "/token", TokenController, :delete
   end
