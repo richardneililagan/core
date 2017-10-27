@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Convert authentication error responses to JSON API.
 - Require user authentication for User endpoints except create (`POST /users`).
 - Require user authentication for Budget endpoints.
+- Require user authentication for Account endpoints.
 - Include location (`links` key) inside API response body instead of header.
 - Change all Budget endpoints to only show budgets associated with the current logged-in user.
 - Improve all error responses to adhere to JSON API.
